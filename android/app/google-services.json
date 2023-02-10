@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "79753424583",
+    "project_id": "khyberwelfare-7eb86",
+    "storage_bucket": "khyberwelfare-7eb86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79753424583:android:7176267910faf32be198e2",
+        "android_client_info": {
+          "package_name": "com.flutter.khyberwelfareforum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79753424583-h91u4hu51h5rm5p7c2a8t47cksue42ba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutter.khyberwelfareforum",
+            "certificate_hash": "1fc5a32764581a34e77aa9568c84091fd595fa96"
+          }
+        },
+        {
+          "client_id": "79753424583-7vbtb8rjmt4c4jk54uegigv4kc444221.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABe8F7iGVyAI2J03Sh4wOuTPGOoH00-gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79753424583-7vbtb8rjmt4c4jk54uegigv4kc444221.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
