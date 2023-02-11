@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +27,12 @@ signup(
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: data['email'], password: data['pass']);
       var uid = await FirebaseAuth.instance.currentUser?.uid;
+      showInSnackBar(
+        "Account Created",
+      );
       addingdata(data, uid!);
+      Navigator.pop(context);
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       showInSnackBar(e.message.toString(), color: Colors.red);
       loginloader(context, back: true);

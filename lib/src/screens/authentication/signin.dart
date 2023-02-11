@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:khyberwelfareforum/src/components/network/signin_network.dart';
 import 'package:khyberwelfareforum/src/screens/authentication/signup.dart';
 import 'package:khyberwelfareforum/src/components/assets.dart';
 
@@ -46,17 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
               textarea(pass, 'Password*'),
               vertical(20),
               buttonmain(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomepageScreen()));
                 if (email.text.isEmpty || pass.text.isEmpty) {
-                  // showInSnackBar('Please Fill All fields', color: Colors.red);
+                  showInSnackBar('Please Fill All fields', color: Colors.red);
                 } else {
-                  // signin(
-                  //     context,
-                  //     {'email': email.text.trim(), 'pass': pass.text},
-                  //     widget.selected);
+                  signin(context, {"email": email.text, "pass": pass.text});
                 }
               }, 'Sign In', 1.0, context),
               vertical(20),

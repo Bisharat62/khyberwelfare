@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:khyberwelfareforum/src/components/network/chechinternet.dart';
-import 'package:khyberwelfareforum/src/screens/authentication/signin.dart';
+import 'package:khyberwelfareforum/src/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignInScreen(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -8,7 +8,8 @@ import '../../../components/assets.dart';
 import '../../../components/widgets_homepage.dart';
 
 class AccountsScreen extends StatelessWidget {
-  const AccountsScreen({super.key});
+  AccountsScreen({super.key});
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,11 @@ class AccountsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {},
           label: boldtext(Ccolor.textblack, 14, "View all Accounts")),
-      appBar: Appbar(title: "Create Accounts"),
+      appBar: Appbar(
+        globalKey: _key,
+        title: "Create Accounts",
+        back: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Wrap(

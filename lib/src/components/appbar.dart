@@ -4,8 +4,10 @@ import '../helpers/color.dart';
 import '../helpers/const_text.dart';
 
 class Appbar extends StatelessWidget with PreferredSizeWidget {
+  GlobalKey<ScaffoldState> globalKey;
   String title;
-  Appbar({super.key, required this.title});
+  bool? back;
+  Appbar({super.key, required this.globalKey, required this.title, this.back});
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +15,29 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: Ccolor.btnbg,
       title: boldtext(Ccolor.textblack, 14, title),
       centerTitle: true,
+      elevation: 0,
       automaticallyImplyLeading: false,
-      leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.black,
-          )),
+      leading: (back == true)
+          ? IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black,
+              ))
+          : IconButton(
+              onPressed: () {
+                globalKey.currentState!.openDrawer();
+              },
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.black,
+              )),
     );
   }
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(40);
 }

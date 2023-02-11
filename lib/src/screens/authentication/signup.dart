@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:khyberwelfareforum/src/components/appbar.dart';
+import 'package:khyberwelfareforum/src/components/network/signup_network.dart';
 import 'package:khyberwelfareforum/src/screens/authentication/signin.dart';
-import 'package:khyberwelfareforum/src/screens/pages/homepage.dart';
 
+import '../../components/network/chechinternet.dart';
 import '../../helpers/button.dart';
 import '../../helpers/color.dart';
 import '../../helpers/const_text.dart';
@@ -20,6 +21,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController phone = TextEditingController();
@@ -36,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController gender = TextEditingController();
   final TextEditingController uc = TextEditingController();
   final TextEditingController disability = TextEditingController();
+  final TextEditingController address = TextEditingController();
   bool firstm = false;
   bool first = false;
   bool second = false;
@@ -46,8 +49,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          widget.create == true ? Appbar(title: widget.title.toString()) : null,
+      appBar: widget.create == true
+          ? Appbar(globalKey: _key, title: widget.title.toString())
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: SingleChildScrollView(
@@ -187,6 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
+              textarea(address, 'Address*'),
               textarea(profession, 'Profession*'),
               vertical(10),
               boldtext(Ccolor.texthint, 14, "Salary"),
@@ -249,15 +254,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : textarea(designation, 'Designation*'),
               textarea(dist, 'Dist*'),
               textarea(tehsil, 'Tehsil*'),
-              textarea(tehsil, 'UC*'),
+              textarea(uc, 'UC*'),
               vertical(20),
               buttonmain(() {
-                // if (name.text.isEmpty ||
-                //     email.text.isEmpty ||
-                //     phone.text.isEmpty ||
-                //     pass.text.isEmpty) {
-                //   // showInSnackBar('Please Fill All fields', color: Colors.red);
-                // } else {}
+                if (name.text.isEmpty ||
+                    email.text.isEmpty ||
+                    phone.text.isEmpty ||
+                    pass.text.isEmpty ||
+                    fname.text.isEmpty ||
+                    age.text.isEmpty ||
+                    cnic.text.isEmpty ||
+                    profession.text.isEmpty ||
+                    salary.text.isEmpty ||
+                    dist.text.isEmpty ||
+                    tehsil.text.isEmpty ||
+                    gender.text.isEmpty ||
+                    uc.text.isEmpty) {
+                  showInSnackBar('Please Fill All fields', color: Colors.red);
+                } else {
+                  signup(context, {
+                    "name": name.text,
+                    "email": email.text.toLowerCase().trim(),
+                    "phone": phone.text,
+                    "pass": pass.text,
+                    "fname": fname.text,
+                    "age": age.text,
+                    "cnic": cnic.text,
+                    "profession": profession.text,
+                    "salary": salary.text,
+                    "dist": dist.text,
+                    "tehsil": tehsil.text,
+                    "address": address.text,
+                    "addedforms": "0",
+                    "tribe": tribe.text == "" ? "Not Available" : tribe.text,
+                    "designation":
+                        designation.text == "" ? "Member" : designation.text,
+                    "gender": gender.text,
+                    "uc": uc.text,
+                    "time": DateTime.now().toString(),
+                    "disability": disability.text == ""
+                        ? "No Any Disability"
+                        : disability.text,
+                    "role": widget.title == null
+                        ? "Member"
+                        : widget.title!.contains("Member")
+                            ? "Member"
+                            : widget.title
+                  });
+                }
               }, widget.create == true ? "Create" : 'Sign Up', 1.0, context),
               vertical(45),
               widget.create == true
@@ -307,12 +351,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-Widget checkboxcard(VoidCallback ontap, bool value, String text) {
+Widget checkboxcard(VoidCallback ontap, bool value, String text,
+    {double? fsize}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10),
     child: Row(
       children: [
-        mediumtext(Ccolor.textblack, 14, text),
+        mediumtext(Ccolor.textblack, fsize ?? 14, text),
         horizental(5),
         InkWell(
           onTap: ontap,
