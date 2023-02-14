@@ -4,6 +4,8 @@ import 'package:khyberwelfareforum/src/screens/pages/database/database_add.dart'
 
 import '../../../components/assets.dart';
 import '../../../components/widgets_homepage.dart';
+import 'database_createdbyme.dart';
+import 'database_view.dart';
 
 class MainDatabaseScreen extends StatelessWidget {
   MainDatabaseScreen({super.key});
@@ -36,10 +38,12 @@ class MainDatabaseScreen extends StatelessWidget {
               ContainerCard(
                 text: "View Database",
                 img: IMAGES.DATABASE_VIEW,
+                navigator: const ViewDatabaseScreen(),
               ),
               ContainerCard(
                 text: "Created By Me",
                 img: IMAGES.DATABASE_ADDBYME,
+                navigator: const ByMeDatabaseScreen(),
               ),
             ],
           ),

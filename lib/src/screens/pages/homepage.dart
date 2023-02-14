@@ -52,7 +52,6 @@ class HomepageScreen extends StatelessWidget {
                 vertical(25),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 240,
                   child: Wrap(
                     runSpacing: 20,
                     alignment: WrapAlignment.spaceEvenly,
@@ -95,6 +94,7 @@ class HomepageScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                vertical(25),
               ],
             ),
           ),

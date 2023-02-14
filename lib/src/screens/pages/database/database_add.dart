@@ -1,15 +1,20 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:khyberwelfareforum/src/components/appbar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:khyberwelfareforum/src/components/globals.dart';
+import 'package:khyberwelfareforum/src/components/network/chechinternet.dart';
+import 'package:khyberwelfareforum/src/components/network/firebase/api.dart';
 import 'package:khyberwelfareforum/src/components/network/firebase/collection_names.dart';
 import 'package:khyberwelfareforum/src/helpers/button.dart';
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/utils_database/add_database_utils.dart';
+import 'package:khyberwelfareforum/src/screens/pages/database/view_childrens.dart';
 
+import '../../../components/loader.dart';
 import '../../../helpers/text_decor.dart';
 import '../../authentication/signup.dart';
 
@@ -25,7 +30,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
     try {
       await FirebaseFirestore.instance
           .collection(CollectionNames.DATABASE)
-          .add({"time": DateTime.now().toString()})
+          .add({"time": DateTime.now().toString(), "name": "empty"})
           .then((value) => {
                 print(value.id),
                 DATABASEUID = value.id,
@@ -67,6 +72,12 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   bool rent = false;
   TextEditingController address = TextEditingController();
   TextEditingController details = TextEditingController();
+
+  String imgName = "";
+  String localpath = "";
+
+  final ImagePicker picker = ImagePicker();
+  String imgUrl = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -77,10 +88,21 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(
-        globalKey: _key,
-        title: "Add Database",
-        back: true,
+      appBar: AppBar(
+        backgroundColor: Ccolor.btnbg,
+        title: boldtext(Ccolor.textblack, 14, "Add Database"),
+        centerTitle: true,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              deletedatabase();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+            )),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -88,7 +110,12 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AddDatabaseHeader(),
+              AddDatabaseHeader(
+                imgurl: imgUrl,
+                ontap: () {
+                  uploadingImage();
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -225,6 +252,11 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               ),
               vertical(15),
               boldtext(Ccolor.texthint, 12, "CHILDREN"),
+              child == true
+                  ? ViewChildrensWidget(
+                      docid: DATABASEUID.toString(),
+                    )
+                  : const SizedBox.shrink(),
               Center(
                 child: buttonmain(() {
                   addchild(context);
@@ -235,7 +267,51 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               vertical(15),
               boldtext(Ccolor.texthint, 12,
                   "ANY CHRONIC AILMENT TO ANY FAMILY MEMBER"),
-              textarea(details, "DETAILS", 0.9)
+              textarea(details, "DETAILS", 0.9),
+              vertical(25),
+              Center(
+                child: buttonmain(() {
+                  if (name.text.isEmpty ||
+                      fname.text.isEmpty ||
+                      phone.text.isEmpty ||
+                      age.text.isEmpty ||
+                      education.text.isEmpty ||
+                      course.text.isEmpty ||
+                      experiance.text.isEmpty ||
+                      cnic.text.isEmpty ||
+                      // job.text.isEmpty ||
+                      salary.text.isEmpty ||
+                      maritalstatus.text.isEmpty ||
+                      house.text.isEmpty ||
+                      address.text.isEmpty) {
+                    showInSnackBar("Please Fill all fields", color: Colors.red);
+                  } else if (imgUrl == "") {
+                    showInSnackBar("Please Upload Image", color: Colors.red);
+                  } else {
+                    FirebaseApi.uploadDatabase(context, {
+                      "formno": "${USEREMAIL!.split("@").first}$ADDEDFORMS",
+                      "name": name.text,
+                      "fname": fname.text,
+                      "phone": phone.text,
+                      "age": age.text,
+                      "education": education.text,
+                      "course": course.text,
+                      "experiance": experiance.text,
+                      "cnic": cnic.text,
+                      "job":
+                          onjob == true ? "${job.text} onjob" : "Searching Job",
+                      "salary": salary.text,
+                      "maritalstatus": maritalstatus.text,
+                      "house": house.text,
+                      "address": address.text,
+                      "details": details.text,
+                      "imgurl": imgUrl,
+                      "createdby": USEREMAIL,
+                    });
+                  }
+                }, "Save", 0.5, context),
+              ),
+              vertical(25),
             ],
           ),
         ),
@@ -259,7 +335,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                 style: textfieldtextstyle,
                 controller: controller,
                 decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 25),
+                    contentPadding: const EdgeInsets.only(left: 10),
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
@@ -285,6 +361,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
         enableDrag: true,
         context: context,
         isDismissible: false,
+        isScrollControlled: true,
         barrierColor: Colors.black.withOpacity(0.8),
         backgroundColor: Colors.transparent,
         builder: (context) {
@@ -316,7 +393,8 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       "name": name.text,
                       "age": age.text,
                       "gender": gender.text,
-                      "school": school.text
+                      "school": school.text,
+                      "time": DateTime.now().toString()
                     });
                     Navigator.pop(context);
                   } catch (e) {
@@ -327,5 +405,58 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
             ),
           );
         });
+  }
+
+  uploadingImage() async {
+    try {
+      final photo = await picker.pickImage(source: ImageSource.gallery);
+      setState(() {
+        localpath = (photo!.path);
+      });
+      uploadingtostorage();
+    } catch (e) {
+      print(e);
+      print('No path selected.');
+    }
+  }
+
+  uploadingtostorage() async {
+    loginloader(context);
+    final storageRef = FirebaseStorage.instance.ref();
+    String url;
+    File image;
+    String imgname = localpath.split("/").last;
+    if (localpath != null) {
+      image = File(localpath);
+      final mountainImagesRef = storageRef.child("database/$imgname");
+      try {
+        await mountainImagesRef.putFile(image);
+        url = await (mountainImagesRef).getDownloadURL();
+        setState(() {
+          imgUrl = url;
+        });
+        // savedata();
+        print(imgUrl);
+      } catch (e) {
+        print(e.toString());
+      }
+    } else {
+      print('No image selected.');
+      return;
+    }
+
+    loginloader(context, back: true);
+  }
+}
+
+deletedatabase() async {
+  try {
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.DATABASE)
+        .doc(DATABASEUID)
+        .delete()
+        .then((value) => print("deleted"));
+  } catch (e) {
+    print(e.toString());
   }
 }
