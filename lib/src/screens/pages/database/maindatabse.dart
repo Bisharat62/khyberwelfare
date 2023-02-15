@@ -3,6 +3,7 @@ import 'package:khyberwelfareforum/src/components/appbar.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/database_add.dart';
 
 import '../../../components/assets.dart';
+import '../../../components/globals.dart';
 import '../../../components/widgets_homepage.dart';
 import 'database_createdbyme.dart';
 import 'database_view.dart';
@@ -35,11 +36,13 @@ class MainDatabaseScreen extends StatelessWidget {
                 img: IMAGES.DATABASE_ADD,
                 navigator: const DatabaseAddScreen(),
               ),
-              ContainerCard(
-                text: "View Database",
-                img: IMAGES.DATABASE_VIEW,
-                navigator: const ViewDatabaseScreen(),
-              ),
+              (USERROLE == "Admin")
+                  ? ContainerCard(
+                      text: "View Database",
+                      img: IMAGES.DATABASE_VIEW,
+                      navigator: const ViewDatabaseScreen(),
+                    )
+                  : const SizedBox.shrink(),
               ContainerCard(
                 text: "Created By Me",
                 img: IMAGES.DATABASE_ADDBYME,

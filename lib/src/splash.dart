@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         USERROLE = values[0];
         USEREMAIL = values[1];
         USERUID = values[2];
-        ADDEDFORMS = _prefs.getString("addedforms");
+        ADDEDFORMS = _prefs.getInt("addedforms");
       });
     }
   }
@@ -53,6 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    totalwidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Ccolor.btnbg,
       body: Center(child: Image.asset(IMAGES.LOGO)),

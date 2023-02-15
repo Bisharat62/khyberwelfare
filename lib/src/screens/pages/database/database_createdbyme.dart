@@ -6,6 +6,8 @@ import 'package:khyberwelfareforum/src/components/network/firebase/collection_na
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 
+import 'detailed_database.dart';
+
 class ByMeDatabaseScreen extends StatefulWidget {
   const ByMeDatabaseScreen({super.key});
 
@@ -88,6 +90,16 @@ class _ByMeDatabaseScreenState extends State<ByMeDatabaseScreen> {
                                             Ccolor.textblack,
                                             12,
                                             "CNIC# : ${list[index]["cnic"]} "),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailedDatabase(
+                                                          data: list[index],
+                                                          docid: finaldata[
+                                                              index])));
+                                        },
                                       )
                                     ],
                                   ),

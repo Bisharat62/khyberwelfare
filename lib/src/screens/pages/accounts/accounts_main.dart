@@ -3,6 +3,7 @@ import 'package:khyberwelfareforum/src/components/appbar.dart';
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/screens/authentication/signup.dart';
+import 'package:khyberwelfareforum/src/screens/pages/accounts/view_all_accounts.dart';
 
 import '../../../components/assets.dart';
 import '../../../components/widgets_homepage.dart';
@@ -16,7 +17,12 @@ class AccountsScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ViewAllAccountsScreen()));
+          },
           label: boldtext(Ccolor.textblack, 14, "View all Accounts")),
       appBar: Appbar(
         globalKey: _key,

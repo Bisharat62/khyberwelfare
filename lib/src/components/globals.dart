@@ -3,5 +3,6 @@
 String? USERROLE;
 String? USEREMAIL;
 String? USERUID;
-String? ADDEDFORMS;
+int? ADDEDFORMS;
 String? DATABASEUID;
+double? totalwidth;

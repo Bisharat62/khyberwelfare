@@ -68,7 +68,7 @@ savedata() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.setStringList(
       "data", [USERROLE.toString(), USEREMAIL.toString(), USERUID.toString()]);
-  _prefs.setString("addedforms", ADDEDFORMS.toString());
+  _prefs.setInt("addedforms", ADDEDFORMS!);
 
   // print(_prefs.getStringList("data"));
 }

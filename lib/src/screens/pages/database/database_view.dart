@@ -4,6 +4,7 @@ import 'package:khyberwelfareforum/src/components/appbar.dart';
 import 'package:khyberwelfareforum/src/components/network/firebase/collection_names.dart';
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
+import 'package:khyberwelfareforum/src/screens/pages/database/detailed_database.dart';
 
 import 'database_createdbyme.dart';
 
@@ -88,6 +89,16 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                                             Ccolor.textblack,
                                             12,
                                             "CNIC# : ${list[index]["cnic"]} "),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailedDatabase(
+                                                          data: list[index],
+                                                          docid: finaldata[
+                                                              index])));
+                                        },
                                       )
                                     ],
                                   ),

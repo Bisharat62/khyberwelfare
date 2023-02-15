@@ -8,7 +8,9 @@ import '../../../../helpers/const_text.dart';
 class AddDatabaseHeader extends StatefulWidget {
   String imgurl;
   VoidCallback ontap;
-  AddDatabaseHeader({super.key, required this.imgurl, required this.ontap});
+  String? formno;
+  AddDatabaseHeader(
+      {super.key, required this.imgurl, required this.ontap, this.formno});
 
   @override
   State<AddDatabaseHeader> createState() => _AddDatabaseHeaderState();
@@ -24,8 +26,12 @@ class _AddDatabaseHeaderState extends State<AddDatabaseHeader> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 border: Border.all(color: Ccolor.texthint, width: 1.5)),
-            child: boldtext(Ccolor.textblack, 10,
-                "Form No : ${USEREMAIL!.split("@").first}$ADDEDFORMS")),
+            child: boldtext(
+                Ccolor.textblack,
+                10,
+                widget.formno == null
+                    ? "Form No : ${USEREMAIL!.split("@").first}$ADDEDFORMS"
+                    : "Form No : ${widget.formno}")),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:khyberwelfareforum/src/components/appbar.dart';
+import 'package:khyberwelfareforum/src/components/network/lists.dart';
 import 'package:khyberwelfareforum/src/components/network/signup_network.dart';
 import 'package:khyberwelfareforum/src/screens/authentication/signin.dart';
 
@@ -46,11 +47,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool less60 = false;
   bool less90 = false;
   bool jobless = false;
+  int distindex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.create == true
-          ? Appbar(globalKey: _key, title: widget.title.toString())
+          ? Appbar(
+              globalKey: _key,
+              title: widget.title.toString(),
+              back: true,
+            )
           : null,
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -285,7 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     "dist": dist.text,
                     "tehsil": tehsil.text,
                     "address": address.text,
-                    "addedforms": "0",
+                    "addedforms": 0,
                     "tribe": tribe.text == "" ? "Not Available" : tribe.text,
                     "designation":
                         designation.text == "" ? "Member" : designation.text,
@@ -328,7 +334,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 40,
               child: TextFormField(
                 style: textfieldtextstyle,
+                readOnly:
+                    hint == "Gender*" || hint == "Dist*" || hint == "Tehsil*"
+                        ? true
+                        : false,
                 controller: controller,
+                onTap: () {
+                  if (hint == "Gender*") {
+                    showbottom(controller, gendername);
+                  } else if (hint == "Dist*") {
+                    showbottom(controller, distnames, number: distindex);
+                  } else if (hint == "Tehsil*") {
+                    showbottom(controller, town[distindex]);
+                  }
+                },
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 25),
                     prefix: (hint == 'Phone*')
@@ -348,6 +367,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  showbottom(TextEditingController _controller, List data, {int? number}) {
+    showModalBottomSheet(
+        backgroundColor: Colors.black.withOpacity(0.3),
+        barrierColor: Colors.black.withOpacity(0.9),
+        context: context,
+        builder: (context) {
+          return Container(
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
+                color: Colors.white),
+            child: StatefulBuilder(
+              builder: (BuildContext context, setState) {
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: boldtext(Ccolor.textblack, 12, data[index]),
+                      onTap: () {
+                        this.setState(
+                          () {
+                            _controller.text = data[index];
+                            if (number != null) {
+                              distindex = index;
+                            }
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        });
   }
 }
 

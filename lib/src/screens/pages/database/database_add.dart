@@ -13,6 +13,7 @@ import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/utils_database/add_database_utils.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/view_childrens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/loader.dart';
 import '../../../helpers/text_decor.dart';
@@ -288,6 +289,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                   } else if (imgUrl == "") {
                     showInSnackBar("Please Upload Image", color: Colors.red);
                   } else {
+                    incresesaved();
                     FirebaseApi.uploadDatabase(context, {
                       "formno": "${USEREMAIL!.split("@").first}$ADDEDFORMS",
                       "name": name.text,
@@ -459,4 +461,16 @@ deletedatabase() async {
   } catch (e) {
     print(e.toString());
   }
+}
+
+incresesaved() async {
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  int? data = _prefs.getInt("addedforms");
+  data = (data! + 1);
+  _prefs.setInt("addedforms", data);
+  ADDEDFORMS = data;
+  await FirebaseFirestore.instance
+      .collection(CollectionNames.USER)
+      .doc(USERUID)
+      .update({"addedforms": data});
 }
