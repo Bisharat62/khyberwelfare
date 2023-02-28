@@ -61,10 +61,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   bool onjob = false;
 
   TextEditingController salary = TextEditingController();
-  bool less30 = false;
-  bool less60 = false;
-  bool less90 = false;
-  bool jobless = false;
+  TextEditingController gender = TextEditingController();
   TextEditingController maritalstatus = TextEditingController();
   bool yes = false;
   bool no = false;
@@ -74,9 +71,13 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController details = TextEditingController();
 
+  bool alive = true;
   String imgName = "";
   String localpath = "";
 
+  String cimgurl = "";
+  String deathcertificate = "";
+  int imgindex = 1;
   final ImagePicker picker = ImagePicker();
   String imgUrl = "";
   @override
@@ -114,33 +115,37 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               AddDatabaseHeader(
                 imgurl: imgUrl,
                 ontap: () {
+                  setState(() {
+                    imgindex = 1;
+                  });
                   uploadingImage();
                 },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  textarea(name, "NAME", 0.4),
-                  textarea(fname, "F/NAME", 0.4),
+                  textarea(name, "NAME*", 0.4),
+                  textarea(fname, "F/NAME*", 0.4),
                 ],
               ),
               vertical(15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  textarea(phone, "CONTACT", 0.3),
-                  textarea(age, "AGE", 0.25),
-                  textarea(education, "EDUCATION", 0.3),
+                  textarea(phone, "CONTACT*", 0.3),
+                  textarea(age, "AGE*", 0.25),
+                  textarea(education, "EDUCATION*", 0.3),
                 ],
               ),
               vertical(15),
+              textarea(gender, "GENDER*", 0.9),
               textarea(course, "ANY TECHNICAL/COMPUTER COURSE", 0.9),
               vertical(15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  textarea(experiance, "EXPERIANCE", 0.4),
-                  textarea(cnic, "CNIC#", 0.4),
+                  textarea(experiance, "EXPERIANCE*", 0.4),
+                  textarea(cnic, "CNIC*", 0.4),
                 ],
               ),
               vertical(15),
@@ -162,52 +167,41 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                 ],
               ),
               vertical(10),
-              boldtext(Ccolor.texthint, 14, "Salary"),
+              boldtext(Ccolor.texthint, 14, "Salary*"),
               vertical(10),
               Row(
                 children: [
                   checkboxcard(() {
                     setState(() {
-                      less30 = true;
-                      less60 = false;
-                      less90 = false;
-                      jobless = false;
                       salary.text = "<30";
                     });
-                  }, less30, "<30"),
+                  }, salary.text == "<30", "<30"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = true;
-                      less90 = false;
-                      jobless = false;
                       salary.text = "<60";
                     });
-                  }, less60, "<60"),
+                  }, salary.text == "<60", "<60"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = false;
-                      less90 = true;
-                      jobless = false;
                       salary.text = "<90";
                     });
-                  }, less90, "<90"),
+                  }, salary.text == "<90", "<90"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = false;
-                      less90 = false;
-                      jobless = true;
+                      salary.text = ">90";
+                    });
+                  }, salary.text == ">90", ">90"),
+                  checkboxcard(() {
+                    setState(() {
                       salary.text = "Jobless";
                     });
-                  }, jobless, "JOBLESS"),
+                  }, salary.text == "Jobless", "JOBLESS"),
                 ],
               ),
               vertical(15),
               Row(
                 children: [
-                  boldtext(Ccolor.texthint, 14, "MARITAL STATUS"),
+                  boldtext(Ccolor.texthint, 14, "MARITAL STATUS*"),
                   checkboxcard(
                     () {
                       setState(() {
@@ -231,7 +225,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               vertical(15),
               Row(
                 children: [
-                  boldtext(Ccolor.texthint, 14, "HOUSE"),
+                  boldtext(Ccolor.texthint, 14, "HOUSE*"),
                   checkboxcard(() {
                     setState(() {
                       own = true;
@@ -261,10 +255,60 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               Center(
                 child: buttonmain(() {
                   addchild(context);
+                  setState(() {
+                    imgindex = 2;
+                  });
                 }, "ADD CHILD", 0.5, context, height: 35, fsize: 12),
               ),
               vertical(15),
-              textarea(address, "ADDRESS", 0.9),
+              textarea(address, "ADDRESS*", 0.9),
+              vertical(15),
+              Row(
+                children: [
+                  boldtext(Ccolor.textblack, 14, "Alive"),
+                  horizental(25),
+                  checkboxcard(() {
+                    setState(() {
+                      alive = true;
+                    });
+                  }, alive, "YES"),
+                  checkboxcard(() {
+                    setState(() {
+                      alive = false;
+                    });
+                  }, alive == false, "NO")
+                ],
+              ),
+              vertical(15),
+              alive == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        buttonmain(() {
+                          uploadingImage();
+                          setState(() {
+                            imgindex = 3;
+                          });
+                        }, "Add Death Certificate", 0.3, context,
+                            fsize: 12, height: 40),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                  width: 1, color: Ccolor.textblack)),
+                          child: deathcertificate == ""
+                              ? const SizedBox.shrink()
+                              : Image.network(
+                                  deathcertificate,
+                                  width: 100,
+                                  height: 100,
+                                ),
+                        )
+                      ],
+                    )
+                  : const SizedBox(),
               vertical(15),
               boldtext(Ccolor.texthint, 12,
                   "ANY CHRONIC AILMENT TO ANY FAMILY MEMBER"),
@@ -277,7 +321,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       phone.text.isEmpty ||
                       age.text.isEmpty ||
                       education.text.isEmpty ||
-                      course.text.isEmpty ||
+                      // course.text.isEmpty ||
                       experiance.text.isEmpty ||
                       cnic.text.isEmpty ||
                       // job.text.isEmpty ||
@@ -286,8 +330,6 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       house.text.isEmpty ||
                       address.text.isEmpty) {
                     showInSnackBar("Please Fill all fields", color: Colors.red);
-                  } else if (imgUrl == "") {
-                    showInSnackBar("Please Upload Image", color: Colors.red);
                   } else {
                     incresesaved();
                     FirebaseApi.uploadDatabase(context, {
@@ -300,6 +342,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       "course": course.text,
                       "experiance": experiance.text,
                       "cnic": cnic.text,
+                      "gender": gender.text,
                       "job":
                           onjob == true ? "${job.text} onjob" : "Searching Job",
                       "salary": salary.text,
@@ -308,6 +351,8 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       "address": address.text,
                       "details": details.text,
                       "imgurl": imgUrl,
+                      "alive": alive ? "YES" : "NO",
+                      "deathimgurl": alive == false ? deathcertificate : "",
                       "createdby": USEREMAIL,
                     });
                   }
@@ -355,10 +400,21 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   }
 
   addchild(context) {
-    final TextEditingController name = TextEditingController();
-    final TextEditingController gender = TextEditingController();
-    final TextEditingController age = TextEditingController();
-    final TextEditingController school = TextEditingController();
+    final TextEditingController cname = TextEditingController();
+    final TextEditingController cgender = TextEditingController();
+    final TextEditingController cage = TextEditingController();
+    final TextEditingController cbirthcertificate = TextEditingController();
+    final TextEditingController ccnic = TextEditingController();
+    final TextEditingController ceducation = TextEditingController();
+    final TextEditingController cskill = TextEditingController();
+    final TextEditingController ccourse = TextEditingController();
+    final TextEditingController cjob = TextEditingController();
+    final TextEditingController cdrug = TextEditingController();
+    final TextEditingController csports = TextEditingController();
+    final TextEditingController cdisablityoption = TextEditingController();
+    final TextEditingController cdisability = TextEditingController();
+    bool hafiz = false;
+    bool alim = false;
     showModalBottomSheet(
         enableDrag: true,
         context: context,
@@ -367,44 +423,210 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
         barrierColor: Colors.black.withOpacity(0.8),
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-            ),
-            child: Column(
-              children: [
-                boldtext(Ccolor.textblack, 14, "Child Data"),
-                vertical(20),
-                textarea(name, "NAME", 0.9),
-                vertical(15),
-                textarea(gender, "GENDER", 0.9),
-                vertical(15),
-                textarea(age, "AGE", 0.9),
-                vertical(15),
-                textarea(school, "SCHOOL", 0.9),
-                vertical(15),
-                buttonmain(() async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(
-                            "${CollectionNames.DATABASE}/$DATABASEUID/${CollectionNames.CHILDREEN}")
-                        .add({
-                      "name": name.text,
-                      "age": age.text,
-                      "gender": gender.text,
-                      "school": school.text,
-                      "time": DateTime.now().toString()
-                    });
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                }, "Save", 0.4, context)
-              ],
-            ),
+          return StatefulBuilder(
+            builder: (BuildContext context, setState) {
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+                height: MediaQuery.of(context).size.height * 0.9,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40)),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      boldtext(Ccolor.textblack, 14, "Child Data"),
+                      Align(
+                          alignment: Alignment.bottomRight,
+                          child: imgicon(context, cimgurl, () {
+                            // setState(() {
+                            //   imgindex = 2;
+                            // });
+                            uploadingImage();
+                          })),
+                      vertical(20),
+                      textarea(cname, "NAME*", 0.9),
+                      textarea(cgender, "GENDER*", 0.9),
+                      textarea(cage, "AGE*", 0.9),
+                      textarea(cbirthcertificate, "BIRTH CERTIFICATE NO", 0.95),
+                      textarea(ccnic, "CNIC (If Made)", 0.9),
+                      textarea(csports, "SPORTS", 0.9),
+                      boldtext(Ccolor.textblack, 12, "EDUCATION"),
+                      SizedBox(
+                        height: 70,
+                        child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  ceducation.text = "Primary";
+                                },
+                              );
+                            }, ceducation.text == "Primary", "Primary"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  ceducation.text = "Middle";
+                                },
+                              );
+                            }, ceducation.text == "Middle", "Middle"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  ceducation.text = "Matric";
+                                },
+                              );
+                            }, ceducation.text == "Matric", "Matric"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  ceducation.text = "Intermediate";
+                                },
+                              );
+                            }, ceducation.text == "Intermediate",
+                                "Intermediate"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  ceducation.text = "Graduation";
+                                },
+                              );
+                            }, ceducation.text == "Graduation", "Graduation"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  hafiz = !hafiz;
+                                },
+                              );
+                            }, hafiz, "Hafiz Quran"),
+                            checkboxcard(() {
+                              setState(
+                                () {
+                                  alim = !alim;
+                                },
+                              );
+                            }, alim, "Alim"),
+                          ],
+                        ),
+                      ),
+                      textarea(cskill, "TECHNICAL SKILLS", 0.9),
+                      textarea(ccourse, "IT Course", 0.9),
+                      Row(
+                        children: [
+                          boldtext(Ccolor.textblack, 12, "Job"),
+                          horizental(30),
+                          checkboxcard(() {
+                            setState(
+                              () {
+                                cjob.text = "Yes";
+                              },
+                            );
+                          }, cjob.text == "Yes", "Yes"),
+                          checkboxcard(() {
+                            setState(
+                              () {
+                                cjob.text = "No";
+                              },
+                            );
+                          }, cjob.text == "No", "No")
+                        ],
+                      ),
+                      vertical(15),
+                      Row(
+                        children: [
+                          boldtext(Ccolor.textblack, 12, "DRUG ADDICTED"),
+                          horizental(30),
+                          checkboxcard(() {
+                            setState(
+                              () {
+                                cdrug.text = "Yes";
+                              },
+                            );
+                          }, cdrug.text == "Yes", "Yes"),
+                          checkboxcard(() {
+                            setState(
+                              () {
+                                cdrug.text = "No";
+                              },
+                            );
+                          }, cdrug.text == "No", "No")
+                        ],
+                      ),
+                      textarea(cdisability, "Any Disability", 0.9),
+                      vertical(30),
+                      Center(
+                        child: buttonmain(() async {
+                          String haf = hafiz ? "Hafiz" : "";
+                          String ali = alim ? "Alim" : "";
+                          print(cimgurl);
+                          if (cname.text.isEmpty ||
+                              cgender.text.isEmpty ||
+                              cage.text.isEmpty) {
+                            showInSnackBar("Please Fill Important Fields",
+                                color: Colors.red);
+                          } else {
+                            loginloader(context);
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(
+                                      "${CollectionNames.DATABASE}/$DATABASEUID/${CollectionNames.CHILDREEN}")
+                                  .add({
+                                "cimgurl": cimgurl,
+                                "name": cname.text,
+                                "age": cage.text,
+                                "gender": cgender.text,
+                                "sports": csports.text.isEmpty
+                                    ? "No Any"
+                                    : csports.text,
+                                "birthcertificate":
+                                    cbirthcertificate.text.isEmpty
+                                        ? "Not Available"
+                                        : cbirthcertificate.text,
+                                "cnic": ccnic.text,
+                                "sports": csports.text,
+                                "education": education.text.isEmpty &&
+                                        alim == false &&
+                                        hafiz == false
+                                    ? "Not Available"
+                                    : "${education.text} $haf  $ali",
+                                "skills": cskill.text.isEmpty
+                                    ? "Not Available"
+                                    : cskill.text,
+                                "itcource": ccourse.text.isEmpty
+                                    ? "Not Available"
+                                    : ccourse.text,
+                                "job": cjob.text.isEmpty
+                                    ? "Not Available"
+                                    : cjob.text,
+                                "drug": cdrug.text.isEmpty
+                                    ? "Not Available"
+                                    : cdrug.text,
+                                "disability": cdisability.text.isEmpty
+                                    ? "Not Available"
+                                    : cdisability.text,
+                                "time": DateTime.now().toString()
+                              });
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            } catch (e) {
+                              Navigator.pop(context);
+                              print(e.toString());
+                            }
+                          }
+                        }, "Save", 0.4, context),
+                      ),
+                      vertical(180),
+                    ],
+                  ),
+                ),
+              );
+            },
           );
         });
   }
@@ -435,7 +657,14 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
         await mountainImagesRef.putFile(image);
         url = await (mountainImagesRef).getDownloadURL();
         setState(() {
-          imgUrl = url;
+          if (imgindex == 1) {
+            imgUrl = url;
+          } else if (imgindex == 3) {
+            deathcertificate = url;
+          } else {
+            cimgurl = url;
+            print(cimgurl);
+          }
         });
         // savedata();
         print(imgUrl);
@@ -446,7 +675,6 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
       print('No image selected.');
       return;
     }
-
     loginloader(context, back: true);
   }
 }

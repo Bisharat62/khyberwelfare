@@ -7,7 +7,24 @@ List distnames = [
   "Malir",
   "Keemari"
 ];
-
+List personNames = [
+  "Abdul Rehman",
+  "Abdul Rahim",
+  "Kamran Afridi",
+  "Asif Khan Afridi",
+  "Suleman Afridi",
+  "Shahid Zaman Afridi",
+  "Zain Afridi",
+];
+List personPhone = [
+  "0331 6548687",
+  "0321 2266985",
+  "0333 3178944",
+  "0348 2424485",
+  "0321 5629098",
+  "0334 2132009",
+  "0345 0210502"
+];
 List gendername = ["Male", "Female", "Other"];
 List town = [
   ["Gulberg", "Liaquatabad", "New Karachi", "North Nazimabad", "Nazimabad"],

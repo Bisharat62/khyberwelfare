@@ -6,3 +6,4 @@ String? USERUID;
 int? ADDEDFORMS;
 String? DATABASEUID;
 double? totalwidth;
+String? distName;

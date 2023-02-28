@@ -21,18 +21,20 @@ class ContainerCard extends StatelessWidget {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.35,
+        width: MediaQuery.of(context).size.width * 0.4,
+        height: 130,
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Ccolor.btnbg.withOpacity(0.7)),
+            borderRadius: BorderRadius.circular(15), color: Ccolor.btnbg),
         child: Column(
           children: [
-            boldtext(Ccolor.textblack, 15, text, center: true),
+            SizedBox(
+                height: 40,
+                child: boldtext(Ccolor.textblack, 15, text, center: true)),
             vertical(15),
             Image.asset(
               img,
-              height: 30,
+              height: 35,
             )
           ],
         ),

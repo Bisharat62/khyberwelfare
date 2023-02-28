@@ -8,6 +8,10 @@ import 'package:khyberwelfareforum/src/components/widgets_homepage.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 import 'package:khyberwelfareforum/src/screens/pages/accounts/accounts_main.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/maindatabse.dart';
+import 'package:khyberwelfareforum/src/screens/pages/requests.dart';
+
+import 'donation.dart';
+import 'formsubmission/form.dart';
 
 class HomepageScreen extends StatelessWidget {
   const HomepageScreen({super.key});
@@ -67,23 +71,47 @@ class HomepageScreen extends StatelessWidget {
                       ContainerCard(
                         text: "MEDICAL AID COMMITTEE",
                         img: IMAGES.MEDICAL,
+                        navigator: ShowHelpFormScreen(
+                          title: "Medical Help",
+                          committee: "medical",
+                        ),
                       ),
                       ContainerCard(
                         text: "LEGAL AID COMMITTEE",
                         img: IMAGES.LEGAL,
+                        navigator: ShowHelpFormScreen(
+                          title: "Legal Help",
+                          committee: "legal",
+                        ),
                       ),
                       ContainerCard(
                         text: "EDUCATION COMMITTEE",
                         img: IMAGES.EDUCATION,
+                        navigator: ShowHelpFormScreen(
+                          title: "Education Help",
+                          committee: "education",
+                        ),
                       ),
                       ContainerCard(
                         text: "EMPLOYMENT COMMITTEE",
                         img: IMAGES.EMPLOYMENT,
+                        navigator: ShowHelpFormScreen(
+                          title: "Employment Help",
+                          committee: "employment",
+                        ),
                       ),
                       ContainerCard(
                         text: "DONATIONS",
                         img: IMAGES.DONATIONS,
+                        navigator: DonationsScreen(),
                       ),
+                      (USERROLE.toString().toLowerCase().contains("member"))
+                          ? const SizedBox.shrink()
+                          : ContainerCard(
+                              text: "REQUESTS",
+                              img: IMAGES.REQUEST,
+                              navigator: const RequestsScreen(),
+                            ),
                       (USERROLE.toString().toLowerCase().contains("member"))
                           ? const SizedBox.shrink()
                           : ContainerCard(

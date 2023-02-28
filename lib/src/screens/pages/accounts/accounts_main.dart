@@ -7,6 +7,7 @@ import 'package:khyberwelfareforum/src/screens/pages/accounts/view_all_accounts.
 
 import '../../../components/assets.dart';
 import '../../../components/widgets_homepage.dart';
+import 'add_commite_members.dart';
 
 class AccountsScreen extends StatelessWidget {
   AccountsScreen({super.key});
@@ -37,6 +38,14 @@ class AccountsScreen extends StatelessWidget {
           alignment: WrapAlignment.spaceEvenly,
           children: [
             ContainerCard(
+              text: "ADMIN",
+              img: IMAGES.COORDINATOR,
+              navigator: SignUpScreen(
+                create: true,
+                title: "Admin",
+              ),
+            ),
+            ContainerCard(
               text: "COORDINATOR",
               img: IMAGES.COORDINATOR,
               navigator: SignUpScreen(
@@ -59,6 +68,27 @@ class AccountsScreen extends StatelessWidget {
                 create: true,
                 title: "Create Member",
               ),
+            ),
+            ContainerCard(
+              text: "HOSPITAL FOCAL PERSON",
+              img: IMAGES.FOCAL_PERSON,
+              navigator: SignUpScreen(
+                create: true,
+                title: "HospitalFocalPerson",
+              ),
+            ),
+            ContainerCard(
+              text: "ACCOUNTANT / TREASURE ",
+              img: IMAGES.FOCAL_PERSON,
+              navigator: SignUpScreen(
+                create: true,
+                title: "accountant/treasure",
+              ),
+            ),
+            ContainerCard(
+              text: "ADD COMMITEE MEMBERS",
+              img: IMAGES.FOCAL_PERSON,
+              navigator: const AddCommiteeMem(),
             ),
           ],
         ),

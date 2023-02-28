@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:khyberwelfareforum/src/components/appbar.dart';
 import 'package:khyberwelfareforum/src/components/network/lists.dart';
@@ -6,6 +8,7 @@ import 'package:khyberwelfareforum/src/components/network/signup_network.dart';
 import 'package:khyberwelfareforum/src/screens/authentication/signin.dart';
 
 import '../../components/network/chechinternet.dart';
+import '../../components/network/firebase/collection_names.dart';
 import '../../helpers/button.dart';
 import '../../helpers/color.dart';
 import '../../helpers/const_text.dart';
@@ -43,11 +46,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool firstm = false;
   bool first = false;
   bool second = false;
-  bool less30 = false;
-  bool less60 = false;
-  bool less90 = false;
-  bool jobless = false;
   int distindex = 0;
+  String idNo = "****";
+  gettotal() async {
+    try {
+      FirebaseFirestore.instance
+          .collection(CollectionNames.USER)
+          .where("role", isNotEqualTo: "Member")
+          .get()
+          .then((value) => {
+                setState(
+                  () {
+                    idNo = (value.docs.length + 1).toString();
+                  },
+                )
+              });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    gettotal();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +94,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mediumtext(Ccolor.texthint, 18,
                   'Create an account to access full version with all features'),
               vertical(50),
+              widget.title == "Create Member" && widget.title == null
+                  ? const SizedBox.shrink()
+                  : boldtext(
+                      Ccolor.textblack, 14, "ID Number     :  ${idNo}    "),
               textarea(name, 'Name*'),
               textarea(fname, "Father's Name*"),
               textarea(email, 'Email*'),
@@ -206,40 +234,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   checkboxcard(() {
                     setState(() {
-                      less30 = true;
-                      less60 = false;
-                      less90 = false;
-                      jobless = false;
                       salary.text = "<30";
                     });
-                  }, less30, "<30"),
+                  }, salary.text == "<30", "<30"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = true;
-                      less90 = false;
-                      jobless = false;
                       salary.text = "<60";
                     });
-                  }, less60, "<60"),
+                  }, salary.text == "<60", "<60"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = false;
-                      less90 = true;
-                      jobless = false;
                       salary.text = "<90";
                     });
-                  }, less90, "<90"),
+                  }, salary.text == "<90", "<90"),
                   checkboxcard(() {
                     setState(() {
-                      less30 = false;
-                      less60 = false;
-                      less90 = false;
-                      jobless = true;
+                      salary.text = ">90";
+                    });
+                  }, salary.text == ">90", ">90"),
+                  checkboxcard(() {
+                    setState(() {
                       salary.text = "Jobless";
                     });
-                  }, jobless, "Jobless"),
+                  }, salary.text == "Jobless", "Jobless"),
                 ],
               ),
               vertical(10),
@@ -279,6 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   showInSnackBar('Please Fill All fields', color: Colors.red);
                 } else {
                   signup(context, {
+                    "id": idNo,
                     "name": name.text,
                     "email": email.text.toLowerCase().trim(),
                     "phone": phone.text,
@@ -412,11 +430,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 Widget checkboxcard(VoidCallback ontap, bool value, String text,
     {double? fsize}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
+    padding: const EdgeInsets.symmetric(horizontal: 8),
     child: Row(
       children: [
         mediumtext(Ccolor.textblack, fsize ?? 14, text),
-        horizental(5),
+        horizental(3),
         InkWell(
           onTap: ontap,
           child: value

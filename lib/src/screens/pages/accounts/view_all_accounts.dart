@@ -7,6 +7,8 @@ import 'package:khyberwelfareforum/src/components/network/firebase/collection_na
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 
+import '../../../helpers/spacer.dart';
+
 class ViewAllAccountsScreen extends StatefulWidget {
   const ViewAllAccountsScreen({super.key});
 
@@ -103,6 +105,23 @@ class _ViewAllAccountsScreenState extends State<ViewAllAccountsScreen> {
                             rowview("Role :", list[index]['role'].toString()),
                             rowview("Total Database created :",
                                 list[index]['addedforms'].toString()),
+                            vertical(25),
+                            Center(
+                                child: IconButton(
+                                    onPressed: () async {
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(CollectionNames.USER)
+                                            .doc(finaldata[index])
+                                            .delete();
+                                      } catch (e) {
+                                        print(e.toString());
+                                      }
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.red,
+                                    )))
                           ],
                         ),
                       );

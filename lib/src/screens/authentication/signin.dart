@@ -10,6 +10,7 @@ import '../../helpers/const_text.dart';
 import '../../helpers/spacer.dart';
 import '../../helpers/text_decor.dart';
 import '../pages/homepage.dart';
+import 'forgotpass.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({
@@ -45,6 +46,17 @@ class _SignInScreenState extends State<SignInScreen> {
               vertical(50),
               textarea(email, 'Email*'),
               textarea(pass, 'Password*'),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotpassScreen()));
+                      },
+                      child: boldtext(Colors.red, 12, "Forgot Password ?"))),
               vertical(20),
               buttonmain(() {
                 if (email.text.isEmpty || pass.text.isEmpty) {

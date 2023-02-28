@@ -7,10 +7,15 @@ import '../../../../helpers/const_text.dart';
 
 class AddDatabaseHeader extends StatefulWidget {
   String imgurl;
+  bool? view;
   VoidCallback ontap;
   String? formno;
   AddDatabaseHeader(
-      {super.key, required this.imgurl, required this.ontap, this.formno});
+      {super.key,
+      required this.imgurl,
+      required this.ontap,
+      this.formno,
+      this.view});
 
   @override
   State<AddDatabaseHeader> createState() => _AddDatabaseHeaderState();
@@ -43,48 +48,54 @@ class _AddDatabaseHeaderState extends State<AddDatabaseHeader> {
                 child: boldtext(Colors.blue, 13,
                     "KHYBER WELFARE FORM KARACHI \n DATABASE FORM",
                     center: true)),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.25,
-              child: Center(
-                child: InkWell(
-                  onTap: widget.ontap,
-                  child: Stack(
-                    children: [
-                      widget.imgurl == null || widget.imgurl == ""
-                          ? CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.black.withOpacity(0.5),
-                              child: const Icon(Icons.person),
-                            )
-                          : CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(widget.imgurl),
-                            ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: InkWell(
-                          onTap: () {
-                            // uploadingImage();
-                          },
-                          child: const CircleAvatar(
-                            radius: 10,
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            imgicon(context, widget.imgurl, widget.ontap, view: widget.view)
           ],
         )
       ],
     );
   }
+}
+
+Widget imgicon(context, String img, VoidCallback ontap, {bool? view}) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width * 0.25,
+    child: Center(
+      child: InkWell(
+        onTap: ontap,
+        child: Stack(
+          children: [
+            img == null || img == ""
+                ? CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.black.withOpacity(0.5),
+                    child: const Icon(Icons.person),
+                  )
+                : CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(img),
+                  ),
+            view == true
+                ? const SizedBox.shrink()
+                : Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: InkWell(
+                      onTap: () {
+                        // uploadingImage();
+                      },
+                      child: const CircleAvatar(
+                        radius: 10,
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  )
+          ],
+        ),
+      ),
+    ),
+  );
 }

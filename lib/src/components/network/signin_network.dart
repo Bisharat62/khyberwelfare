@@ -46,6 +46,7 @@ signin(context, Map data) async {
                 USERROLE = value.data()!["role"],
                 USEREMAIL = value.data()!["email"],
                 ADDEDFORMS = value.data()!["addedforms"],
+                distName = value.data()!["dist"]
               });
       if (USEREMAIL != null) {
         savedata();
@@ -58,6 +59,7 @@ signin(context, Map data) async {
     } catch (e) {
       print(e.toString());
 
+      showInSnackBar("No User Record Found", color: Colors.red);
       loginloader(context, back: true);
     }
   }
@@ -69,6 +71,7 @@ savedata() async {
   _prefs.setStringList(
       "data", [USERROLE.toString(), USEREMAIL.toString(), USERUID.toString()]);
   _prefs.setInt("addedforms", ADDEDFORMS!);
+  _prefs.setString("dist", distName!);
 
   // print(_prefs.getStringList("data"));
 }

@@ -28,47 +28,77 @@ class _DetailedDatabaseState extends State<DetailedDatabase> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AddDatabaseHeader(
-              imgurl: widget.data['imgurl'],
-              ontap: () {},
-              formno: widget.data['formno'],
-            ),
-            boldtext(Ccolor.textblack, 12,
-                "NAME :  ${widget.data['name']}__________ F/NAME :  ${widget.data['fname']}"),
-            boldtext(Ccolor.textblack, 12,
-                "CONTACT :${widget.data['phone']}_____AGE : ${widget.data['age']}____ EDUCATION :${widget.data['education']} "),
-            boldtext(Ccolor.textblack, 12,
-                "ANY TECHNICAL/COMPUTER COURSE : ${widget.data['course']}"),
-            boldtext(Ccolor.textblack, 12, "JOB : ${widget.data['job']}"),
-            boldtext(Ccolor.textblack, 12, "SALARY : ${widget.data['salary']}"),
-            boldtext(Ccolor.textblack, 12,
-                "MARITAL STATUS : ${widget.data['maritalstatus']}"),
-            boldtext(Ccolor.textblack, 12, "HOUSE : ${widget.data['house']}"),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                boldtext(Ccolor.textblack, 12, "CHILDREN"),
-                vertical(5),
-                ViewChildrensWidget(docid: widget.docid),
-              ],
-            ),
-            boldtext(
-                Ccolor.textblack, 12, "ADDRESS : ${widget.data['address']}"),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                boldtext(Ccolor.textblack, 12,
-                    "ANY CHRONIC AILMENT TO ANY FAMILY MEMBER"),
-                vertical(5),
-                boldtext(Ccolor.textblack, 12,
-                    "DETAILS : ${widget.data['details']}"),
-              ],
-            )
-          ],
+        child: SingleChildScrollView(
+          controller: ScrollController(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AddDatabaseHeader(
+                imgurl: widget.data['imgurl'].toString(),
+                ontap: () {},
+                formno: widget.data['formno'],
+                view: true,
+              ),
+              boldtext(Ccolor.textblack, 12,
+                  "NAME :  ${widget.data['name']}__________ F/NAME :  ${widget.data['fname']}"),
+              vertical(10),
+              boldtext(Ccolor.textblack, 12,
+                  "CONTACT :${widget.data['phone']}_____AGE : ${widget.data['age']}____ EDUCATION :${widget.data['education']} "),
+              vertical(10),
+              boldtext(Ccolor.textblack, 12,
+                  "ANY TECHNICAL/COMPUTER COURSE : ${widget.data['course']}"),
+              vertical(10),
+              boldtext(Ccolor.textblack, 12, "JOB : ${widget.data['job']}"),
+              vertical(10),
+              boldtext(
+                  Ccolor.textblack, 12, "SALARY : ${widget.data['salary']}"),
+              vertical(10),
+              boldtext(Ccolor.textblack, 12,
+                  "MARITAL STATUS : ${widget.data['maritalstatus']}"),
+              vertical(10),
+              boldtext(Ccolor.textblack, 12, "HOUSE : ${widget.data['house']}"),
+              vertical(10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  boldtext(Ccolor.textblack, 12, "CHILDREN"),
+                  vertical(5),
+                  ViewChildrensWidget(docid: widget.docid),
+                ],
+              ),
+              vertical(10),
+              boldtext(
+                  Ccolor.textblack, 12, "ADDRESS : ${widget.data['address']}"),
+              vertical(10),
+              boldtext(
+                  Ccolor.textblack,
+                  12,
+                  widget.data['alive'] == null
+                      ? "ALIVE : YES"
+                      : "ALIVE : ${widget.data['alive']}"),
+              vertical(15),
+              widget.data['alive'] == "NO"
+                  ? Column(
+                      children: [
+                        boldtext(Ccolor.textblack, 13, "Death Certificate"),
+                        Image.network(widget.data['deathimgurl'])
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+              vertical(10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  boldtext(Ccolor.textblack, 12,
+                      "ANY CHRONIC AILMENT TO ANY FAMILY MEMBER"),
+                  vertical(5),
+                  boldtext(Ccolor.textblack, 12,
+                      "DETAILS : ${widget.data['details']}"),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

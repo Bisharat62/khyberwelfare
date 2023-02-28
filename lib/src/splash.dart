@@ -26,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         USEREMAIL = values[1];
         USERUID = values[2];
         ADDEDFORMS = _prefs.getInt("addedforms");
+        distName = _prefs.getString("dist");
       });
     }
   }

@@ -4,6 +4,7 @@ import 'package:khyberwelfareforum/src/components/appbar.dart';
 import 'package:khyberwelfareforum/src/components/network/firebase/collection_names.dart';
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
+import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/detailed_database.dart';
 
 import 'database_createdbyme.dart';
@@ -58,7 +59,7 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                         itemCount: list.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
-                          return list[index]['name'].toString == "empty" ||
+                          return list[index]['name'] == "empty" ||
                                   list[index]['name'].toString == "" ||
                                   list[index]['name'].toString == null
                               ? const SizedBox.shrink()
@@ -99,7 +100,28 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                                                           docid: finaldata[
                                                               index])));
                                         },
-                                      )
+                                      ),
+                                      vertical(20),
+                                      Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: IconButton(
+                                              onPressed: () async {
+                                                try {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          CollectionNames
+                                                              .DATABASE)
+                                                      .doc(finaldata[index])
+                                                      .delete();
+                                                } catch (e) {
+                                                  print(e.toString());
+                                                }
+                                              },
+                                              icon: const Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.red,
+                                              )))
                                     ],
                                   ),
                                 );
