@@ -7,6 +7,8 @@ import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 import 'package:khyberwelfareforum/src/screens/pages/database/detailed_database.dart';
 
+import '../../../components/globals.dart';
+import '../../../helpers/alertbox.dart';
 import 'database_createdbyme.dart';
 
 class ViewDatabaseScreen extends StatefulWidget {
@@ -68,13 +70,16 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                                       vertical: 10, horizontal: 10),
                                   child: Column(
                                     children: [
-                                      Row(
+                                      Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           boldtext(Ccolor.textblack, 12,
                                               "FormNO : ${list[index]['formno']}"),
-                                          boldtext(Ccolor.textblack, 12,
+                                          vertical(10),
+                                          boldtext(Ccolor.texthint, 12,
                                               "CreatedBY : ${list[index]['createdby']}"),
                                         ],
                                       ),
@@ -102,26 +107,33 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                                         },
                                       ),
                                       vertical(20),
-                                      Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: IconButton(
-                                              onPressed: () async {
-                                                try {
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection(
-                                                          CollectionNames
-                                                              .DATABASE)
-                                                      .doc(finaldata[index])
-                                                      .delete();
-                                                } catch (e) {
-                                                  print(e.toString());
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete_forever,
-                                                color: Colors.red,
-                                              )))
+                                      (USERROLE == "Admin")
+                                          ? Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: IconButton(
+                                                  onPressed: () async {
+                                                    showDelete(context,
+                                                        () async {
+                                                      try {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                CollectionNames
+                                                                    .DATABASE)
+                                                            .doc(finaldata[
+                                                                index])
+                                                            .delete();
+                                                      } catch (e) {
+                                                        print(e.toString());
+                                                      }
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete_forever,
+                                                    color: Colors.red,
+                                                  )))
+                                          : const SizedBox.shrink()
                                     ],
                                   ),
                                 );

@@ -122,7 +122,7 @@ Widget donationsum(String month) {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    boldtext(Ccolor.textblack, 16, "Expenditure"),
+                    boldtext(Ccolor.textblack, 16, "Funds Received"),
                     vertical(10),
                     boldtext(Ccolor.textblack, 16, "$total"),
                   ],
@@ -168,7 +168,7 @@ Widget expensessum(String month) {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    boldtext(Ccolor.textblack, 16, "Funds Received"),
+                    boldtext(Ccolor.textblack, 16, "Expenditure"),
                     vertical(10),
                     boldtext(Ccolor.textblack, 16, "$total"),
                   ],

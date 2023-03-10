@@ -5,6 +5,7 @@ import 'package:khyberwelfareforum/src/helpers/button.dart';
 import 'package:khyberwelfareforum/src/screens/pages/controlldonations/controlldonation.dart';
 
 import '../../components/globals.dart';
+import 'add_donation_accounts.dart';
 
 class DonationsScreen extends StatelessWidget {
   DonationsScreen({super.key});
@@ -19,6 +20,7 @@ class DonationsScreen extends StatelessWidget {
         back: true,
       ), //accounts
       body: SingleChildScrollView(
+        controller: ScrollController(),
         child: Column(
           children: [
             (USERROLE == "Admin" || USERROLE == "accountant/treasure")
@@ -33,13 +35,14 @@ class DonationsScreen extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.9,
-              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height * 0.9,
+              // width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                IMAGES.ACCOUNTSDETAILS,
+                'assets/images/new.jpeg',
                 fit: BoxFit.fill,
               ),
-            )
+            ),
+            SizedBox(child: viewDonationAccounts())
           ],
         ),
       ),

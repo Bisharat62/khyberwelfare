@@ -39,6 +39,7 @@ class _ViewDonationScreenState extends State<ViewDonationScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(CollectionNames.DONATIONS)
+            .orderBy('date', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {

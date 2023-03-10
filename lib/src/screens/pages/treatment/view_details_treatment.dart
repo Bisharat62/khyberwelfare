@@ -6,6 +6,8 @@ import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 
 import '../../../components/appbar.dart';
+import '../../../components/globals.dart';
+import '../../../helpers/alertbox.dart';
 
 class ViewDetailsTreatment extends StatefulWidget {
   const ViewDetailsTreatment({super.key});
@@ -19,10 +21,15 @@ class _ViewDetailsTreatmentState extends State<ViewDetailsTreatment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(globalKey: _key, title: "View Treatment Details"),
+      appBar: Appbar(
+        globalKey: _key,
+        title: "View Treatment Details",
+        back: true,
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(CollectionNames.TREATMENT)
+            .orderBy('date', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
@@ -116,6 +123,30 @@ class _ViewDetailsTreatmentState extends State<ViewDetailsTreatment> {
                                       },
                                     ),
                                   ),
+                            vertical(15),
+                            (USERROLE == "Admin")
+                                ? Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: IconButton(
+                                        onPressed: () async {
+                                          showDelete(context, () async {
+                                            try {
+                                              await FirebaseFirestore.instance
+                                                  .collection(
+                                                      CollectionNames.TREATMENT)
+                                                  .doc(finaldata[index])
+                                                  .delete();
+                                            } catch (e) {
+                                              print(e.toString());
+                                            }
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete_forever,
+                                          color: Colors.red,
+                                        )))
+                                : const SizedBox.shrink(),
                             Divider(
                               height: 4,
                               thickness: 4,

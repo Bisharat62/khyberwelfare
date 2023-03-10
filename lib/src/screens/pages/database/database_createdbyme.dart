@@ -17,6 +17,8 @@ class ByMeDatabaseScreen extends StatefulWidget {
 
 class _ByMeDatabaseScreenState extends State<ByMeDatabaseScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  String search = '';
+  dynamic searchList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

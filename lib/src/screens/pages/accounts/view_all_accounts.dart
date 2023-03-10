@@ -7,6 +7,7 @@ import 'package:khyberwelfareforum/src/components/network/firebase/collection_na
 import 'package:khyberwelfareforum/src/helpers/color.dart';
 import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 
+import '../../../helpers/alertbox.dart';
 import '../../../helpers/spacer.dart';
 
 class ViewAllAccountsScreen extends StatefulWidget {
@@ -109,14 +110,18 @@ class _ViewAllAccountsScreenState extends State<ViewAllAccountsScreen> {
                             Center(
                                 child: IconButton(
                                     onPressed: () async {
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(CollectionNames.USER)
-                                            .doc(finaldata[index])
-                                            .delete();
-                                      } catch (e) {
-                                        print(e.toString());
-                                      }
+                                      print('hello');
+                                      showDelete(context, () async {
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(CollectionNames.USER)
+                                              .doc(finaldata[index])
+                                              .delete();
+                                        } catch (e) {
+                                          print(e.toString());
+                                        }
+                                        Navigator.pop(context);
+                                      });
                                     },
                                     icon: const Icon(
                                       Icons.delete_forever,

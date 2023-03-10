@@ -39,7 +39,8 @@ class _ViewExpensesScreenState extends State<ViewExpensesScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection(CollectionNames.DONATIONS)
+            .collection(CollectionNames.EXPENSES)
+            .orderBy('date', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {

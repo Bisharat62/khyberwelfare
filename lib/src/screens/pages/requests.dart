@@ -5,7 +5,9 @@ import 'package:khyberwelfareforum/src/helpers/const_text.dart';
 import 'package:khyberwelfareforum/src/helpers/spacer.dart';
 
 import '../../components/appbar.dart';
+import '../../components/globals.dart';
 import '../../components/network/firebase/collection_names.dart';
+import '../../helpers/alertbox.dart';
 
 class RequestsScreen extends StatefulWidget {
   const RequestsScreen({super.key});
@@ -81,6 +83,29 @@ class _RequestsScreenState extends State<RequestsScreen> {
                           vertical(10),
                           boldtext(Ccolor.textblack, 12,
                               "COMMENTS   ${list[index]["comments"]}"),
+                          // vertical(20),
+                          // Align(
+                          //     alignment: Alignment.bottomRight,
+                          //     child: IconButton(
+                          //         onPressed: () async {
+                          //           print('hello');
+                          //           showDelete(context, () async {
+                          //             try {
+                          //               await FirebaseFirestore.instance
+                          //                   .collection(
+                          //                       CollectionNames.HELPREQUEST)
+                          //                   .doc(finaldata[index])
+                          //                   .delete();
+                          //             } catch (e) {
+                          //               print(e.toString());
+                          //             }
+                          //             Navigator.pop(context);
+                          //           });
+                          //         },
+                          //         icon: const Icon(
+                          //           Icons.delete_forever,
+                          //           color: Colors.red,
+                          //         ))),
                           vertical(10),
                           list[index]["request"] == "Legal Help"
                               ? Column(
@@ -92,6 +117,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                         "YEAR  ${list[index]["year"]}"),
                                     boldtext(Ccolor.textblack, 12,
                                         "POLICE STATION  ${list[index]["policestation"]}"),
+                                    vertical(20),
                                   ],
                                 )
                               : const SizedBox.shrink(),
@@ -112,6 +138,33 @@ class _RequestsScreenState extends State<RequestsScreen> {
                                         "Delivery   ${list[index]["deliver"]}"),
                                   ],
                                 )
+                              : const SizedBox.shrink(),
+                          vertical(10),
+                          boldtext(Ccolor.btnbg, 12,
+                              "Time             ${(list[index]["time"]).toString().split('.').first}"),
+                          vertical(20),
+                          (USERROLE == "Admin")
+                              ? Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        showDelete(context, () async {
+                                          try {
+                                            await FirebaseFirestore.instance
+                                                .collection(
+                                                    CollectionNames.HELPREQUEST)
+                                                .doc(finaldata[index])
+                                                .delete();
+                                          } catch (e) {
+                                            print(e.toString());
+                                          }
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete_forever,
+                                        color: Colors.red,
+                                      )))
                               : const SizedBox.shrink(),
                         ],
                       ),
