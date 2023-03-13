@@ -7,6 +7,7 @@ import '../../../components/globals.dart';
 import '../../../components/widgets_homepage.dart';
 import 'database_createdbyme.dart';
 import 'database_view.dart';
+import 'foodsecurity/mainfood.dart';
 
 class MainDatabaseScreen extends StatelessWidget {
   MainDatabaseScreen({super.key});
@@ -32,9 +33,14 @@ class MainDatabaseScreen extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ContainerCard(
-                text: "Create Database",
+                text: "Create General Database",
                 img: IMAGES.DATABASE_ADD,
                 navigator: const DatabaseAddScreen(),
+              ),
+              ContainerCard(
+                text: "Food Security Program",
+                img: IMAGES.DATABASE_ADD,
+                navigator: const MainFoodSecurity(),
               ),
               (USERROLE == "Admin")
                   ? ContainerCard(

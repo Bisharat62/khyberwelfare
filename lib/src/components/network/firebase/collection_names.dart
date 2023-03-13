@@ -9,4 +9,7 @@ class CollectionNames {
   static String TREATMENT = "treatment";
   static String DONATIONS = "donations";
   static String EXPENSES = "expenses";
+  static String ORPHANS = "orphan";
+  static String WIDOW = "widow";
+  static String DISABLED = "disabled";
 }

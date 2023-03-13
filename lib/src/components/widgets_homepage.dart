@@ -8,18 +8,24 @@ class ContainerCard extends StatelessWidget {
   String text;
   String img;
   Widget? navigator;
+  VoidCallback? ontap;
   ContainerCard(
-      {super.key, required this.text, required this.img, this.navigator});
+      {super.key,
+      required this.text,
+      required this.img,
+      this.navigator,
+      this.ontap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (navigator != null) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => navigator!));
-        }
-      },
+      onTap: ontap ??
+          () {
+            if (navigator != null) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => navigator!));
+            }
+          },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.4,
         height: 130,

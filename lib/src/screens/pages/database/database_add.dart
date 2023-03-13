@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:khyberwelfareforum/src/components/globals.dart';
 import 'package:khyberwelfareforum/src/components/network/chechinternet.dart';
@@ -71,6 +74,8 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController details = TextEditingController();
 
+  bool first = false;
+  bool second = false;
   bool alive = true;
   String imgName = "";
   String localpath = "";
@@ -145,8 +150,76 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   textarea(experiance, "EXPERIANCE*", 0.4),
-                  textarea(cnic, "CNIC*", 0.4),
+                  // textarea(cnic, "CNIC*", 0.4),
                 ],
+              ),
+              SizedBox(
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    boldtext(Ccolor.texthint, 14, 'CNIC'),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(15),
+                        ],
+                        style: const TextStyle(color: Colors.black),
+                        controller: cnic,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          // print('lengthis ${value.length}');
+                          if (value.length == 4) {
+                            setState(() {
+                              first = true;
+                            });
+                          }
+                          if (value.length == 5 && first == true) {
+                            cnic.text = value + '-';
+                            cnic.selection = TextSelection.collapsed(
+                                offset: cnic.text.length);
+                            setState(() {
+                              first = false;
+                            });
+                          }
+                          if (value.length == 12) {
+                            setState(() {
+                              second = true;
+                            });
+                          }
+                          if (value.length == 13 && second == true) {
+                            setState(() {
+                              cnic.text = value + '-';
+                              cnic.selection = TextSelection.collapsed(
+                                  offset: cnic.text.length);
+                              second = false;
+                            });
+                          }
+                        },
+                        //
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.contact_mail_outlined,
+                            ),
+                            hintText: "Enter Your Cnic",
+                            hintStyle:
+                                TextStyle(color: Theme.of(context).hintColor),
+                            // border: InputBorder.none,
+                            contentPadding: const EdgeInsets.only(left: 10),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(color: Ccolor.texthint)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(color: Ccolor.texthint)),
+                            fillColor: Ccolor.textwhite),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               vertical(15),
               Row(
@@ -169,34 +242,40 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               vertical(10),
               boldtext(Ccolor.texthint, 14, "Salary*"),
               vertical(10),
-              Row(
-                children: [
-                  checkboxcard(() {
-                    setState(() {
-                      salary.text = "<30";
-                    });
-                  }, salary.text == "<30", "<30"),
-                  checkboxcard(() {
-                    setState(() {
-                      salary.text = "<60";
-                    });
-                  }, salary.text == "<60", "<60"),
-                  checkboxcard(() {
-                    setState(() {
-                      salary.text = "<90";
-                    });
-                  }, salary.text == "<90", "<90"),
-                  checkboxcard(() {
-                    setState(() {
-                      salary.text = ">90";
-                    });
-                  }, salary.text == ">90", ">90"),
-                  checkboxcard(() {
-                    setState(() {
-                      salary.text = "Jobless";
-                    });
-                  }, salary.text == "Jobless", "JOBLESS"),
-                ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  children: [
+                    checkboxcard(() {
+                      setState(() {
+                        salary.text = "<30";
+                      });
+                    }, salary.text == "<30", "<30"),
+                    checkboxcard(() {
+                      setState(() {
+                        salary.text = "<60";
+                      });
+                    }, salary.text == "<60", "<60"),
+                    checkboxcard(() {
+                      setState(() {
+                        salary.text = "<90";
+                      });
+                    }, salary.text == "<90", "<90"),
+                    checkboxcard(() {
+                      setState(() {
+                        salary.text = ">90";
+                      });
+                    }, salary.text == ">90", ">90"),
+                    checkboxcard(() {
+                      setState(() {
+                        salary.text = "Jobless";
+                      });
+                    }, salary.text == "Jobless", "JOBLESS"),
+                  ],
+                ),
               ),
               vertical(15),
               Row(
@@ -315,7 +394,7 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
               textarea(details, "DETAILS", 0.9),
               vertical(25),
               Center(
-                child: buttonmain(() {
+                child: buttonmain(() async {
                   if (name.text.isEmpty ||
                       fname.text.isEmpty ||
                       phone.text.isEmpty ||
@@ -331,30 +410,37 @@ class _DatabaseAddScreenState extends State<DatabaseAddScreen> {
                       address.text.isEmpty) {
                     showInSnackBar("Please Fill all fields", color: Colors.red);
                   } else {
-                    incresesaved();
-                    FirebaseApi.uploadDatabase(context, {
-                      "formno": "${USEREMAIL!.split("@").first}$ADDEDFORMS",
-                      "name": name.text,
-                      "fname": fname.text,
-                      "phone": phone.text,
-                      "age": age.text,
-                      "education": education.text,
-                      "course": course.text,
-                      "experiance": experiance.text,
-                      "cnic": cnic.text,
-                      "gender": gender.text,
-                      "job":
-                          onjob == true ? "${job.text} onjob" : "Searching Job",
-                      "salary": salary.text,
-                      "maritalstatus": maritalstatus.text,
-                      "house": house.text,
-                      "address": address.text,
-                      "details": details.text,
-                      "imgurl": imgUrl,
-                      "alive": alive ? "YES" : "NO",
-                      "deathimgurl": alive == false ? deathcertificate : "",
-                      "createdby": USEREMAIL,
-                    });
+                    var exist = await checking(
+                        context, cnic.text, CollectionNames.DATABASE);
+                    print('exist $exist');
+                    if (exist == false) {
+                      incresesaved();
+                      FirebaseApi.uploadDatabase(context, {
+                        "formno": "${USEREMAIL!.split("@").first}$ADDEDFORMS",
+                        // 'serialno': documents + 1,
+                        "name": name.text,
+                        "fname": fname.text,
+                        "phone": phone.text,
+                        "age": age.text,
+                        "education": education.text,
+                        "course": course.text,
+                        "experiance": experiance.text,
+                        "cnic": cnic.text,
+                        "gender": gender.text,
+                        "job": onjob == true
+                            ? "${job.text} onjob"
+                            : "Searching Job",
+                        "salary": salary.text,
+                        "maritalstatus": maritalstatus.text,
+                        "house": house.text,
+                        "address": address.text,
+                        "details": details.text,
+                        "imgurl": imgUrl,
+                        "alive": alive ? "YES" : "NO",
+                        "deathimgurl": alive == false ? deathcertificate : "",
+                        "createdby": USEREMAIL,
+                      });
+                    }
                   }
                 }, "Save", 0.5, context),
               ),

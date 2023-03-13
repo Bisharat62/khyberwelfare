@@ -16,11 +16,46 @@ class FirebaseApi {
     Map<String, dynamic> data,
   ) async {
     loginloader(context);
+    // try {
+    //   data['serialno'] = await FirebaseFirestore.instance
+    //       .collection(CollectionNames.DATABASE)
+    //       .snapshots()
+    //       .length;
+    // } catch (e) {
+    //   print(e.toString());
+    // }
+
     try {
       await FirebaseFirestore.instance
           .collection(CollectionNames.DATABASE)
           .doc(DATABASEUID)
           .set(
+            data,
+          );
+      Navigator.pop(context);
+      Navigator.pop(context);
+      showInSnackBar("Database Created");
+    } catch (e) {
+      print(e.toString());
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+  }
+
+  static uploadFoodSecurity(
+      context, Map<String, dynamic> data, String colName) async {
+    loginloader(context);
+    // try {
+    //   data['serialno'] = await FirebaseFirestore.instance
+    //       .collection(CollectionNames.DATABASE)
+    //       .snapshots()
+    //       .length;
+    // } catch (e) {
+    //   print(e.toString());
+    // }
+
+    try {
+      await FirebaseFirestore.instance.collection(colName).add(
             data,
           );
       Navigator.pop(context);
@@ -90,4 +125,36 @@ void updateondatabase(String pass) async {
   } catch (e) {
     print(e.toString());
   }
+}
+
+checking(context, String cnic, String collection) async {
+  bool? exist;
+  print(cnic);
+  loginloader(context);
+  print('inside checking');
+  try {
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .where('cnic', isEqualTo: cnic)
+        .get()
+        .then((value) => {
+              if (value.docs.isNotEmpty)
+                {
+                  exist = true,
+                  showInSnackBar('CNIC already exist in database',
+                      color: Colors.red)
+                },
+              print(value.docs.length)
+              // {
+
+              // }
+            });
+
+    Navigator.pop(context);
+  } catch (e) {
+    Navigator.pop(context);
+    print(e.toString());
+  }
+  print(exist);
+  return exist ?? false;
 }

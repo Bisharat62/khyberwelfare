@@ -76,25 +76,33 @@ class _ViewDatabaseScreenState extends State<ViewDatabaseScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          boldtext(Ccolor.textblack, 12,
-                                              "FormNO : ${list[index]['formno']}"),
-                                          vertical(10),
-                                          boldtext(Ccolor.texthint, 12,
-                                              "CreatedBY : ${list[index]['createdby']}"),
+                                          // vertical(10),
+                                          // boldtext(Ccolor.texthint, 12,
+                                          //     "Created by : ${list[index]['createdby']}"),
                                         ],
                                       ),
                                       ListTile(
-                                        leading: CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: NetworkImage(
-                                              "${list[index]['imgurl']}"),
-                                        ),
+                                        leading: list[index]['imgurl'] == ''
+                                            ? null
+                                            : CircleAvatar(
+                                                radius: 30,
+                                                backgroundImage: NetworkImage(
+                                                    "${list[index]['imgurl']}"),
+                                              ),
                                         title: mediumtext(Ccolor.textblack, 12,
                                             "NAME : ${list[index]["name"]} , F/Name : ${list[index]["fname"]}"),
-                                        subtitle: mediumtext(
-                                            Ccolor.textblack,
-                                            12,
-                                            "CNIC# : ${list[index]["cnic"]} "),
+                                        subtitle: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            mediumtext(Ccolor.textblack, 12,
+                                                "CNIC# : ${list[index]["cnic"]} "),
+                                            boldtext(Ccolor.textblack, 10,
+                                                "Form no # : ${list[index]['formno']}"),
+                                          ],
+                                        ),
                                         onTap: () {
                                           Navigator.push(
                                               context,
